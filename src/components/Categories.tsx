@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Categories } from '../types/type';
+import { CategoriesType } from '../types/type';
 import { getCategories } from '../services/api';
 
 function Categories() {
-  const [categoriesList, setCategoriesList] = useState<Categories[]>([]);
+  const [categoriesList, setCategoriesList] = useState<CategoriesType[]>([]);
 
   useEffect(() => {
     const getCategoriesList = async () => {
