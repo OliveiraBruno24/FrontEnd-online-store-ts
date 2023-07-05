@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Cart() {
+function Checkout() {
   return (
     <h2 data-testid="shopping-cart-empty-message">
       Seu carrinho está vazio
@@ -9,4 +9,4 @@ function Cart() {
   );
 }
 
-export default Cart;
+export default Checkout;

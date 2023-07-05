@@ -27,3 +27,13 @@ export async function getProductById(productId: string) {
     console.log(error);
   }
 }
+
+export async function getProductByName(productName: string) {
+  try {
+    const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${productName}`);
+    const data = await response.json();
+    return (data.results);
+  } catch (error) {
+    console.log(error);
+  }
+}
