@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Search() {
   return (
@@ -10,6 +11,13 @@ function Search() {
       >
         Digite algum termo de pesquisa ou escolha uma categoria.
       </h2>
+
+      <Link
+        to="/cart"
+        data-testid="shopping-cart-button"
+      >
+        Carrinho
+      </Link>
     </>
   );
 }
