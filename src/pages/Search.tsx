@@ -20,7 +20,7 @@ function Search() {
     const arrayCart = shoppingCart;
     arrayCart.push(product);
     setShoppingCart(arrayCart);
-    localStorage.setItem('carriho', JSON.stringify(arrayCart));
+    localStorage.setItem('carrinho', JSON.stringify(arrayCart));
   }
 
   const searchProducts = async () => {

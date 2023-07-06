@@ -12,6 +12,7 @@ function ProductCard({ product, addItemToCard }: ProductCardProps) {
       <h1>{product.title}</h1>
       <p>{product.price}</p>
       <button
+        data-testid="product-add-to-cart"
         onClick={ () => addItemToCard() }
       >
         Adicionar ao Carrinho
