@@ -1,10 +1,10 @@
 import React from 'react';
-import { ProductDetails } from '../../types/type';
+import { ProductDetailsWithQuantity } from '../../types/type';
 import CartHeader from './CartHeader';
 import CartFooter from './CartFooter';
 
 type CartProps = {
-  products: ProductDetails[]
+  products: ProductDetailsWithQuantity[]
 };
 
 function Cart({ products }:CartProps) {
@@ -22,6 +22,7 @@ function Cart({ products }:CartProps) {
                 {product.title}
 
               </h2>
+              <p>{product.quantity}</p>
               <h2>{product.price}</h2>
             </li>
           ))}

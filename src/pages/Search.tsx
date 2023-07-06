@@ -6,7 +6,7 @@ import {
   getProductByName,
 } from '../services/api';
 
-import { ProductDetails } from '../types/type';
+import { ProductDetails, ProductDetailsWithQuantity } from '../types/type';
 import ProductCard from '../components/ProductCard';
 import Categories from '../components/Categories';
 
@@ -14,11 +14,16 @@ function Search() {
   const [productList, setProductList] = useState<ProductDetails[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [shoppingCart, setShoppingCart] = useState<ProductDetails[]>([]);
+  const [shoppingCart, setShoppingCart] = useState<ProductDetailsWithQuantity[]>([]);
 
-  function addToCart(product:ProductDetails) {
+  function addToCart(newProduct:ProductDetails) {
     const arrayCart = shoppingCart;
-    arrayCart.push(product);
+    const productIndex = arrayCart.findIndex((product) => (product.id === newProduct.id));
+    if (productIndex === -1) {
+      arrayCart.push({ ...newProduct, quantity: 1 });
+    } else {
+      arrayCart[productIndex].quantity += 1;
+    }
     setShoppingCart(arrayCart);
     localStorage.setItem('carrinho', JSON.stringify(arrayCart));
   }

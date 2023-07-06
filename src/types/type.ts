@@ -9,3 +9,15 @@ export type ProductDetails = {
   thumbnail: string,
   price: number,
 };
+
+// export type ProductDetailsWithQuantity = {
+//   id: string,
+//   title: string,
+//   thumbnail: string,
+//   price: number,
+//   quantity: number
+// };
+
+export interface ProductDetailsWithQuantity extends ProductDetails {
+  quantity: number;
+}

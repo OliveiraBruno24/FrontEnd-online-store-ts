@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Cart from '../components/Cart/Cart';
-import { ProductDetails } from '../types/type';
+import { ProductDetailsWithQuantity } from '../types/type';
 
 function Checkout() {
-  const [cartProducts, setCartProducts] = useState<ProductDetails[]>([]);
+  const [cartProducts, setCartProducts] = useState<ProductDetailsWithQuantity[]>([]);
   useEffect(() => {
     const fileLocal = JSON.parse(localStorage.getItem('carrinho') ?? '[]');
     setCartProducts(fileLocal);
