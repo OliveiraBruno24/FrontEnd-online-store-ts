@@ -2,8 +2,9 @@ import React from 'react';
 import { ProductDetails } from '../types/type';
 
 type ProductCardProps = {
-  product: ProductDetails
+  product: ProductDetails;
 };
+
 function ProductCard({ product }: ProductCardProps) {
   return (
     <>

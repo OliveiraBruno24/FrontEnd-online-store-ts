@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getProductByName } from '../services/api';
+
+import {
+  getAllProductsFromCategory,
+  getProductByName,
+} from '../services/api';
+
 import { ProductDetails } from '../types/type';
 import ProductCard from '../components/ProductCard';
+import Categories from '../components/Categories';
 
 function Search() {
   const [productList, setProductList] = useState<ProductDetails[]>([]);
@@ -20,55 +26,65 @@ function Search() {
     setSearchInput(evt.target.value);
   };
 
+  const getProductsFromCategory = async (categoryId: string) => {
+    setIsLoading(true);
+    const results = await getAllProductsFromCategory(categoryId);
+    setProductList(results);
+    setIsLoading(false);
+  };
+
   if (isLoading) {
     return (<div>Carregando...</div>);
   }
 
   return (
     <>
-      <input
-        data-testid="query-input"
-        type="text"
-        name="searchField"
-        value={ searchInput }
-        placeholder="Insira o nome do Produto"
-        onChange={ onChangeSearchField }
-      />
-      <button
-        onClick={ () => searchProducts() }
-        data-testid="query-button"
-      >
-        Pesquisar
-      </button>
+      <Categories handleCategoryClick={ getProductsFromCategory } />
+      <main>
+        <input
+          data-testid="query-input"
+          type="text"
+          name="searchField"
+          value={ searchInput }
+          placeholder="Insira o nome do Produto"
+          onChange={ onChangeSearchField }
+        />
+        <button
+          onClick={ () => searchProducts() }
+          data-testid="query-button"
+        >
+          Pesquisar
+        </button>
 
-      <h2 data-testid="home-initial-message">
-        Digite algum termo de pesquisa ou escolha uma categoria.
-      </h2>
+        <h2 data-testid="home-initial-message">
+          Digite algum termo de pesquisa ou escolha uma categoria.
+        </h2>
 
-      {productList.length === 0
-        ? (
-          <h2>
-            Nenhum produto foi encontrado
-          </h2>
-        )
-        : (
-          <ul>
-            {productList.map((product) => (
-              <li data-testid="product" key={ product.id }>
-                <ProductCard
-                  product={ product }
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        {productList.length === 0
+          ? (
+            <h2>
+              Nenhum produto foi encontrado
+            </h2>
+          )
+          : (
+            <ul>
+              {productList.map((product) => (
+                <li data-testid="product" key={ product.id }>
+                  <ProductCard
+                    product={ product }
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
 
-      <Link
-        to="/cart"
-        data-testid="shopping-cart-button"
-      >
-        Carrinho
-      </Link>
+        <Link
+          to="/checkout"
+          data-testid="shopping-cart-button"
+        >
+          Carrinho
+        </Link>
+      </main>
     </>
   );
 }
