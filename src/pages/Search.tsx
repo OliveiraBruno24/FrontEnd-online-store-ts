@@ -14,6 +14,11 @@ function Search() {
   const [productList, setProductList] = useState<ProductDetails[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [shoppingCart, setShoppingCart] = useState<ProductDetails[]>([]);
+
+  function addToCart(product:ProductDetails) {
+    console.log(product);
+  }
 
   const searchProducts = async () => {
     setIsLoading(true);
@@ -71,6 +76,7 @@ function Search() {
               {productList.map((product) => (
                 <li data-testid="product" key={ product.id }>
                   <ProductCard
+                    addItemToCard={ () => addToCart(product) }
                     product={ product }
                   />
                 </li>

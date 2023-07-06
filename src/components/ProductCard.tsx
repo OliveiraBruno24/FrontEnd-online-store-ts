@@ -2,16 +2,20 @@ import React from 'react';
 import { ProductDetails } from '../types/type';
 
 type ProductCardProps = {
-  product: ProductDetails;
+  product: ProductDetails
+  addItemToCard: () => void;
 };
-
-function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product, addItemToCard }: ProductCardProps) {
   return (
     <>
       <img src={ product.thumbnail } alt="" />
       <h1>{product.title}</h1>
       <p>{product.price}</p>
-      <button>Adicionar ao Carrinho</button>
+      <button
+        onClick={ () => addItemToCard() }
+      >
+        Adicionar ao Carrinho
+      </button>
     </>
   );
 }
