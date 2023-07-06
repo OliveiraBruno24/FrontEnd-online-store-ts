@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getProductByName } from '../services/api';
+import { getProductByName, getProductsFromCategoryAndQuery } from '../services/api';
 import { ProductDetails } from '../types/type';
 import ProductCard from '../components/ProductCard';
 
@@ -8,6 +8,21 @@ function Search() {
   const [productList, setProductList] = useState<ProductDetails[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const categoryInput = event.target.id;
+    setSelectedCategory(categoryInput);
+
+    getProductsFromCategoryAndQuery(categoryInput, '')
+      .then((data) => {
+        setProductList(data.results);
+      })
+      .catch((error) => {
+        console.error('Erro ao adquirir produtos', error);
+      });
+  };
 
   const searchProducts = async () => {
     setIsLoading(true);
@@ -57,6 +72,8 @@ function Search() {
               <li data-testid="product" key={ product.id }>
                 <ProductCard
                   product={ product }
+                  checked={ selectedCategory === product.id }
+                  onChange={ handleCategoryChange }
                 />
               </li>
             ))}
