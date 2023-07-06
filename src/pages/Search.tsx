@@ -17,7 +17,10 @@ function Search() {
   const [shoppingCart, setShoppingCart] = useState<ProductDetails[]>([]);
 
   function addToCart(product:ProductDetails) {
-    console.log(product);
+    const arrayCart = shoppingCart;
+    arrayCart.push(product);
+    setShoppingCart(arrayCart);
+    localStorage.setItem('carriho', JSON.stringify(arrayCart));
   }
 
   const searchProducts = async () => {
