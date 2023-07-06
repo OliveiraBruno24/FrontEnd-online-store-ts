@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { CategoriesType } from '../types/type';
 import { getCategories } from '../services/api';
 
-function Categories() {
+type CategoriesProps = {
+  handleCategoryClick: (categoryId:string) => void
+};
+
+function Categories(props: CategoriesProps) {
+  const { handleCategoryClick } = props;
   const [categoriesList, setCategoriesList] = useState<CategoriesType[]>([]);
 
   useEffect(() => {
@@ -13,11 +18,14 @@ function Categories() {
 
     getCategoriesList();
   }, []);
+
   return (
     <div>
       {categoriesList.map((category) => (
         <button
+          onClick={ () => handleCategoryClick(category.id) }
           key={ category.id }
+          name={ category.id }
           data-testid="category"
         >
           {category.name}
