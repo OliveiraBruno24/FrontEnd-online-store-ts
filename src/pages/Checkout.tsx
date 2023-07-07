@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Cart from '../components/Cart/Cart';
-import { ProductDetails, ProductDetailsWithQuantity } from '../types/type';
+import { ProductDetailsWithQuantity } from '../types/type';
 
 function Checkout() {
-  const [cartProducts, setCartProducts] = useState<ProductDetailsWithQuantity[]>([]);
-  useEffect(() => {
-    const fileLocal = JSON.parse(localStorage.getItem('carrinho') ?? '[]');
-    setCartProducts(fileLocal);
-  }, []);
+  const fileLocal = JSON.parse(localStorage.getItem('carrinho') ?? '[]');
+  const [cartProducts, setCartProducts] = useState(fileLocal);
+
+  const removeItem = (selectedProductId: string) => {
+    const filteredArray = cartProducts
+      .filter((element:ProductDetailsWithQuantity) => element.id !== selectedProductId);
+    localStorage.setItem('carrinho', JSON.stringify(filteredArray));
+    setCartProducts(filteredArray);
+  };
 
   return (
     <div>
@@ -19,6 +23,7 @@ function Checkout() {
           </h2>
         )
         : <Cart
+            removeItem={ removeItem }
             products={ cartProducts }
         />}
 
