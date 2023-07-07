@@ -1,23 +1,46 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import {
   getAllProductsFromCategory,
   getProductByName,
 } from '../services/api';
 
-import { ProductDetails } from '../types/type';
+import { ProductDetails, ProductDetailsWithQuantity } from '../types/type';
 import ProductCard from '../components/ProductCard';
-import Categories from '../components/Categories';
 
 function Search() {
+  const navigate = useNavigate();
   const [productList, setProductList] = useState<ProductDetails[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [shoppingCart, setShoppingCart] = useState<ProductDetailsWithQuantity[]>([]);
 
-  const searchProducts = async () => {
+  const { category, productName } = useParams();
+  useEffect(() => {
+    if (category) {
+      getProductsFromCategory(category);
+    } else if (productName) {
+      setSearchInput(productName);
+      searchProducts(productName);
+    }
+  }, [category, productName]);
+
+  function addToCart(newProduct:ProductDetails) {
+    const arrayCart = shoppingCart;
+    const productIndex = arrayCart.findIndex((product) => (product.id === newProduct.id));
+    if (productIndex === -1) {
+      arrayCart.push({ ...newProduct, quantity: 1 });
+    } else {
+      arrayCart[productIndex].quantity += 1;
+    }
+    setShoppingCart(arrayCart);
+    localStorage.setItem('carrinho', JSON.stringify(arrayCart));
+  }
+
+  const searchProducts = async (product: string) => {
     setIsLoading(true);
-    const results = await getProductByName(searchInput);
+    const results = await getProductByName(product);
     setProductList(results);
     setIsLoading(false);
   };
@@ -38,54 +61,52 @@ function Search() {
   }
 
   return (
-    <>
-      <Categories handleCategoryClick={ getProductsFromCategory } />
-      <main>
-        <input
-          data-testid="query-input"
-          type="text"
-          name="searchField"
-          value={ searchInput }
-          placeholder="Insira o nome do Produto"
-          onChange={ onChangeSearchField }
-        />
-        <button
-          onClick={ () => searchProducts() }
-          data-testid="query-button"
-        >
-          Pesquisar
-        </button>
+    <main>
+      <input
+        data-testid="query-input"
+        type="text"
+        name="searchField"
+        value={ searchInput }
+        placeholder="Insira o nome do Produto"
+        onChange={ onChangeSearchField }
+      />
+      <button
+        onClick={ () => navigate(`/${searchInput}`) }
+        data-testid="query-button"
+      >
+        Pesquisar
+      </button>
 
-        <h2 data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </h2>
+      <h2 data-testid="home-initial-message">
+        Digite algum termo de pesquisa ou escolha uma categoria.
+      </h2>
 
-        {productList.length === 0
-          ? (
-            <h2>
-              Nenhum produto foi encontrado
-            </h2>
-          )
-          : (
-            <ul>
-              {productList.map((product) => (
-                <li data-testid="product" key={ product.id }>
-                  <ProductCard
-                    product={ product }
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
+      {productList.length === 0
+        ? (
+          <h2>
+            Nenhum produto foi encontrado
+          </h2>
+        )
+        : (
+          <ul>
+            {productList.map((product) => (
+              <li data-testid="product" key={ product.id }>
+                <ProductCard
+                  addItemToCard={ () => addToCart(product) }
+                  product={ product }
+                />
+              </li>
+            ))}
+          </ul>
+        )}
 
-        <Link
-          to="/checkout"
-          data-testid="shopping-cart-button"
-        >
-          Carrinho
-        </Link>
-      </main>
-    </>
+      <Link
+        to="/checkout"
+        data-testid="shopping-cart-button"
+      >
+        Carrinho
+      </Link>
+    </main>
   );
 }
 

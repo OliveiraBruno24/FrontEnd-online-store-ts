@@ -1,11 +1,15 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Categories from '../components/Categories';
 
 function Layout() {
   return (
-    <main>
-      <Outlet />
-    </main>
+    <>
+      <Categories />
+      <main>
+        <Outlet />
+      </main>
+    </>
   );
 }
 

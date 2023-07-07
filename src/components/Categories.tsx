@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CategoriesType } from '../types/type';
 import { getCategories } from '../services/api';
 
-type CategoriesProps = {
-  handleCategoryClick: (categoryId:string) => void
-};
+// type CategoriesProps = {
+//   handleCategoryClick: (categoryId:string) => void
+// };
 
-function Categories(props: CategoriesProps) {
-  const { handleCategoryClick } = props;
+function Categories() {
+  const navigate = useNavigate();
+  // const { handleCategoryClick } = props;
   const [categoriesList, setCategoriesList] = useState<CategoriesType[]>([]);
 
   useEffect(() => {
@@ -23,7 +25,7 @@ function Categories(props: CategoriesProps) {
     <div>
       {categoriesList.map((category) => (
         <button
-          onClick={ () => handleCategoryClick(category.id) }
+          onClick={ () => navigate(`/c/${category.id}`) }
           key={ category.id }
           name={ category.id }
           data-testid="category"
