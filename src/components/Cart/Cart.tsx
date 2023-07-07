@@ -2,29 +2,26 @@ import React from 'react';
 import { ProductDetailsWithQuantity } from '../../types/type';
 import CartHeader from './CartHeader';
 import CartFooter from './CartFooter';
+import { CartItem } from './CartItem';
 
 type CartProps = {
-  products: ProductDetailsWithQuantity[]
+  products: ProductDetailsWithQuantity[];
+  removeItem: (productId:string) => void;
+
 };
 
-function Cart({ products }:CartProps) {
+function Cart({ products, removeItem }:CartProps) {
   return (
     <>
       <CartHeader />
       <div>
         <ul>
           {products.map((product) => (
-            <li key={ product.id }>
-              <img src={ product.thumbnail } alt="" />
-              <h2
-                data-testid="shopping-cart-product-name"
-              >
-                {product.title}
-
-              </h2>
-              <p data-testid="shopping-cart-product-quantity">{product.quantity}</p>
-              <h2>{product.price}</h2>
-            </li>
+            <CartItem
+              product={ product }
+              key={ product.id }
+              removeItem={ () => removeItem(product.id) }
+            />
           ))}
         </ul>
       </div>
