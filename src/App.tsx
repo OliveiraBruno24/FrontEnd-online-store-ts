@@ -4,6 +4,7 @@ import React from 'react';
 import Search from './pages/Search';
 import Checkout from './pages/Checkout';
 import Layout from './pages/Layout';
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route index element={ <Search /> } />
         <Route path="/:productName" element={ <Search /> } />
         <Route path="/c/:category" element={ <Search /> } />
+        <Route path="/product/:productId" element={ <ProductDetail /> } />
         <Route path="/checkout" element={ <Checkout /> } />
       </Route>
     </Routes>

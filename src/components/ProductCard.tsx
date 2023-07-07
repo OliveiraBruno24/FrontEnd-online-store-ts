@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ProductDetails } from '../types/type';
 
 type ProductCardProps = {
@@ -8,9 +9,14 @@ type ProductCardProps = {
 function ProductCard({ product, addItemToCard }: ProductCardProps) {
   return (
     <>
-      <img src={ product.thumbnail } alt="" />
-      <h1>{product.title}</h1>
-      <p>{product.price}</p>
+      <Link
+        data-testid="product-detail-link"
+        to={ `/product/${product.id}` }
+      >
+        <img src={ product.thumbnail } alt="" />
+        <h1>{product.title}</h1>
+        <p>{product.price}</p>
+      </Link>
       <button
         data-testid="product-add-to-cart"
         onClick={ () => addItemToCard() }
