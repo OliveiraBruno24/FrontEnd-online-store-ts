@@ -16,15 +16,15 @@ function Search() {
   const [isLoading, setIsLoading] = useState(false);
   const [shoppingCart, setShoppingCart] = useState<ProductDetailsWithQuantity[]>([]);
 
-  const { category, product } = useParams();
+  const { category, productName } = useParams();
   useEffect(() => {
     if (category) {
       getProductsFromCategory(category);
-    } else if (product) {
-      setSearchInput(product);
-      searchProducts(product);
+    } else if (productName) {
+      setSearchInput(productName);
+      searchProducts(productName);
     }
-  }, [category, product]);
+  }, [category, productName]);
 
   function addToCart(newProduct:ProductDetails) {
     const arrayCart = shoppingCart;
@@ -38,12 +38,11 @@ function Search() {
     localStorage.setItem('carrinho', JSON.stringify(arrayCart));
   }
 
-  const searchProducts = async (productName: string) => {
+  const searchProducts = async (product: string) => {
     setIsLoading(true);
-    const results = await getProductByName(productName);
+    const results = await getProductByName(product);
     setProductList(results);
     setIsLoading(false);
-    // navigate(`/${productName}`);
   };
 
   const onChangeSearchField = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +71,7 @@ function Search() {
         onChange={ onChangeSearchField }
       />
       <button
-        onClick={ () => searchProducts() }
+        onClick={ () => navigate(`/${searchInput}`) }
         data-testid="query-button"
       >
         Pesquisar
