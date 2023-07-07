@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Cart from '../components/Cart/Cart';
-import { ProductDetailsWithQuantity } from '../types/type';
+import { ProductDetails, ProductDetailsWithQuantity } from '../types/type';
 
 function Checkout() {
   const [cartProducts, setCartProducts] = useState<ProductDetailsWithQuantity[]>([]);
@@ -18,7 +18,9 @@ function Checkout() {
             Seu carrinho está vazio
           </h2>
         )
-        : <Cart products={ cartProducts } />}
+        : <Cart
+            products={ cartProducts }
+        />}
 
     </div>
   );
