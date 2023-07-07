@@ -10,9 +10,8 @@ import { ProductDetails, ProductDetailsWithQuantity } from '../types/type';
 import ProductCard from '../components/ProductCard';
 
 function Search() {
-  const navigate = useNavigate();
   const [productList, setProductList] = useState<ProductDetails[]>([]);
-  const [searchInput, setSearchInput] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const [shoppingCart, setShoppingCart] = useState<ProductDetailsWithQuantity[]>([]);
 
@@ -21,7 +20,6 @@ function Search() {
     if (category) {
       getProductsFromCategory(category);
     } else if (productName) {
-      setSearchInput(productName);
       searchProducts(productName);
     }
   }, [category, productName]);
@@ -45,10 +43,6 @@ function Search() {
     setIsLoading(false);
   };
 
-  const onChangeSearchField = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(evt.target.value);
-  };
-
   const getProductsFromCategory = async (categoryId: string) => {
     setIsLoading(true);
     const results = await getAllProductsFromCategory(categoryId);
@@ -62,21 +56,6 @@ function Search() {
 
   return (
     <main>
-      <input
-        data-testid="query-input"
-        type="text"
-        name="searchField"
-        value={ searchInput }
-        placeholder="Insira o nome do Produto"
-        onChange={ onChangeSearchField }
-      />
-      <button
-        onClick={ () => navigate(`/${searchInput}`) }
-        data-testid="query-button"
-      >
-        Pesquisar
-      </button>
-
       <h2 data-testid="home-initial-message">
         Digite algum termo de pesquisa ou escolha uma categoria.
       </h2>
@@ -99,13 +78,6 @@ function Search() {
             ))}
           </ul>
         )}
-
-      <Link
-        to="/checkout"
-        data-testid="shopping-cart-button"
-      >
-        Carrinho
-      </Link>
     </main>
   );
 }
