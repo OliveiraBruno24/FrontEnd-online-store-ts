@@ -7,6 +7,7 @@ type CartItemProps = {
 
 export function CartItem({ product }:CartItemProps) {
   const [quantity, setQuantity] = useState(product.quantity);
+
   return (
     <li>
       <img src={ product.thumbnail } alt="" />
@@ -17,7 +18,13 @@ export function CartItem({ product }:CartItemProps) {
       </h2>
       <p>{quantity}</p>
       <button onClick={ () => setQuantity((prev) => prev + 1) }>+</button>
-      <button onClick={ () => setQuantity((prev) => prev - 1) }>-</button>
+      <button
+        onClick={ () => setQuantity((prev) => prev - 1) }
+        disabled={ quantity === 1 }
+      >
+        -
+
+      </button>
       <h2>{product.price}</h2>
     </li>
   );
