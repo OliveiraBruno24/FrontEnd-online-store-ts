@@ -24,6 +24,13 @@ function Search() {
     }
   }, [category, productName]);
 
+  useEffect(() => {
+    const storedCart = localStorage.getItem('carrinho');
+    if (storedCart) {
+      setShoppingCart(JSON.parse(storedCart));
+    }
+  }, []);
+
   function addToCart(newProduct:ProductDetails) {
     const arrayCart = shoppingCart;
     const productIndex = arrayCart.findIndex((product) => (product.id === newProduct.id));
