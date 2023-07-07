@@ -22,7 +22,7 @@ function Cart({ products }:CartProps) {
                 {product.title}
 
               </h2>
-              <p>{product.quantity}</p>
+              <p data-testid="shopping-cart-product-quantity">{product.quantity}</p>
               <h2>{product.price}</h2>
             </li>
           ))}

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import {
   getAllProductsFromCategory,
@@ -8,13 +8,23 @@ import {
 
 import { ProductDetails, ProductDetailsWithQuantity } from '../types/type';
 import ProductCard from '../components/ProductCard';
-import Categories from '../components/Categories';
 
 function Search() {
+  const navigate = useNavigate();
   const [productList, setProductList] = useState<ProductDetails[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [shoppingCart, setShoppingCart] = useState<ProductDetailsWithQuantity[]>([]);
+
+  const { category, product } = useParams();
+  useEffect(() => {
+    if (category) {
+      getProductsFromCategory(category);
+    } else if (product) {
+      setSearchInput(product);
+      searchProducts(product);
+    }
+  }, [category, product]);
 
   function addToCart(newProduct:ProductDetails) {
     const arrayCart = shoppingCart;
@@ -28,11 +38,12 @@ function Search() {
     localStorage.setItem('carrinho', JSON.stringify(arrayCart));
   }
 
-  const searchProducts = async () => {
+  const searchProducts = async (productName: string) => {
     setIsLoading(true);
-    const results = await getProductByName(searchInput);
+    const results = await getProductByName(productName);
     setProductList(results);
     setIsLoading(false);
+    // navigate(`/${productName}`);
   };
 
   const onChangeSearchField = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,55 +62,52 @@ function Search() {
   }
 
   return (
-    <>
-      <Categories handleCategoryClick={ getProductsFromCategory } />
-      <main>
-        <input
-          data-testid="query-input"
-          type="text"
-          name="searchField"
-          value={ searchInput }
-          placeholder="Insira o nome do Produto"
-          onChange={ onChangeSearchField }
-        />
-        <button
-          onClick={ () => searchProducts() }
-          data-testid="query-button"
-        >
-          Pesquisar
-        </button>
+    <main>
+      <input
+        data-testid="query-input"
+        type="text"
+        name="searchField"
+        value={ searchInput }
+        placeholder="Insira o nome do Produto"
+        onChange={ onChangeSearchField }
+      />
+      <button
+        onClick={ () => searchProducts() }
+        data-testid="query-button"
+      >
+        Pesquisar
+      </button>
 
-        <h2 data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </h2>
+      <h2 data-testid="home-initial-message">
+        Digite algum termo de pesquisa ou escolha uma categoria.
+      </h2>
 
-        {productList.length === 0
-          ? (
-            <h2>
-              Nenhum produto foi encontrado
-            </h2>
-          )
-          : (
-            <ul>
-              {productList.map((product) => (
-                <li data-testid="product" key={ product.id }>
-                  <ProductCard
-                    addItemToCard={ () => addToCart(product) }
-                    product={ product }
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
+      {productList.length === 0
+        ? (
+          <h2>
+            Nenhum produto foi encontrado
+          </h2>
+        )
+        : (
+          <ul>
+            {productList.map((product) => (
+              <li data-testid="product" key={ product.id }>
+                <ProductCard
+                  addItemToCard={ () => addToCart(product) }
+                  product={ product }
+                />
+              </li>
+            ))}
+          </ul>
+        )}
 
-        <Link
-          to="/checkout"
-          data-testid="shopping-cart-button"
-        >
-          Carrinho
-        </Link>
-      </main>
-    </>
+      <Link
+        to="/checkout"
+        data-testid="shopping-cart-button"
+      >
+        Carrinho
+      </Link>
+    </main>
   );
 }
 
