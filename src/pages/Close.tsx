@@ -12,18 +12,30 @@ function Close() {
     setCartProducts(storedCart);
   }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     const formData = new FormData(event.target as HTMLFormElement);
     const formValues = Object.fromEntries(formData.entries());
 
-    if (Object.values(formValues).some((value) => value === '')) {
-      setHasError(true);
-    } else {
+    const inputs = [
+      'fullname',
+      'email',
+      'cpf',
+      'phone',
+      'cep',
+      'address',
+      'paymentMethod'];
+
+    const allInputs = inputs.every((input) => formValues[input]
+    && formValues[input] !== '');
+
+    if (allInputs) {
       localStorage.setItem('carrinho', JSON.stringify([]));
       setHasError(false);
       navigate('/');
+    } else {
+      setHasError(true);
     }
   };
   return (
@@ -53,27 +65,27 @@ function Close() {
           <form onSubmit={ handleSubmit }>
             <label>
               Nome completo
-              <input type="text" data-testid="checkout-fullname" required />
+              <input type="text" name="fullname" data-testid="checkout-fullname" />
             </label>
             <label>
               E-mail
-              <input type="email" data-testid="checkout-email" required />
+              <input type="email" name="email" data-testid="checkout-email" />
             </label>
             <label>
               CPF
-              <input type="text" data-testid="checkout-cpf" required />
+              <input type="text" name="cpf" data-testid="checkout-cpf" />
             </label>
             <label>
               Telefone
-              <input type="tel" data-testid="checkout-phone" required />
+              <input type="tel" name="phone" data-testid="checkout-phone" />
             </label>
             <label>
               CEP
-              <input type="text" data-testid="checkout-cep" required />
+              <input type="text" name="cep" data-testid="checkout-cep" />
             </label>
             <label>
               Endereço
-              <input type="text" data-testid="checkout-address" required />
+              <input type="text" name="address" data-testid="checkout-address" />
             </label>
 
             <h3>Método de pagamento</h3>
@@ -81,27 +93,37 @@ function Close() {
               <input
                 type="radio"
                 name="paymentMethod"
-                value="Cartão de crédito"
-                required
+                value="Boleto"
+                data-testid="ticket-payment"
               />
-              Cartão de crédito
+              Boleto
             </label>
             <label>
               <input
                 type="radio"
                 name="paymentMethod"
-                value="Cartão de débito"
-                required
+                value="Visa"
+                data-testid="visa-payment"
               />
-              Cartão de débito
+              Visa
             </label>
             <label>
-              <input type="radio" name="paymentMethod" value="Dinheiro" required />
-              Dinheiro
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="MasterCard"
+                data-testid="master-payment"
+              />
+              MasterCard
             </label>
             <label>
-              <input type="radio" name="paymentMethod" value="Cheque" required />
-              Cheque
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="Elo"
+                data-testid="elo-payment"
+              />
+              Elo
             </label>
 
             <button type="submit" data-testid="checkout-btn">Finalizar compra</button>
