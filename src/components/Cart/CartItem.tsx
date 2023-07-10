@@ -47,6 +47,7 @@ export function CartItem({ product, removeItem }:CartItemProps) {
       <button
         data-testid="product-increase-quantity"
         onClick={ () => addItem(product.id) }
+        disabled={ quantity >= product.available_quantity }
       >
         +
       </button>
@@ -57,7 +58,7 @@ export function CartItem({ product, removeItem }:CartItemProps) {
       >
         -
       </button>
-      <h2>{product.price}</h2>
+      <h2>{product.price * quantity}</h2>
     </li>
   );
 }
